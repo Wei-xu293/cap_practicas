@@ -16,7 +16,7 @@
 
 (defn dm [v w]
   (let [u (map vector v w)]
-    (reduce #(+ (abs (- (first %2) (second %2))) %1) 0 u)))
+    (reduce #(+ (abs (- (first %2) (second %2))) %1) 0.0 u)))
 
 (defn dh [v w]
   (let [n (count v) m (count w) u (map vector v w)]
