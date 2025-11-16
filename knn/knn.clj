@@ -27,8 +27,8 @@
 (defn knn [dist-func class-vector]
   (fn [v]
     (let [sorted-neighbors (sort-by #(dist-func v (:x %)) class-vector)
-          k-neighbors (first sorted-neighbors)]
-      (:y k-neighbors))))
+          onn (first sorted-neighbors)]
+      (:y onn))))
 
 ;(use 'knn :reload-all)
 
