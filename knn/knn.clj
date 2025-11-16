@@ -1,6 +1,6 @@
-(ns knn 
+(ns knn
   (:require
-    [clojure.math :as m]))
+   [clojure.math :as m]))
 
 
 (defn foldr [f x0 s]
@@ -10,7 +10,7 @@
 
 (def fold foldr)
 
-(defn de [v w] 
+(defn de [v w]
   (let [u (map vector v w)]
     (m/sqrt (fold #(+ (* (- (first %1) (second %1)) (- (first %1) (second %1))) %2) 0 u))))
 
@@ -22,6 +22,13 @@
   (let [n (count v) m (count w) u (map vector v w)]
     (assert (= n m))
     (/ (reduce #(if (= (first %2) (second %2)) %1 (inc %1)) 0 u) n)))
+
+
+(defn knn [dist-func class-vector]
+  (fn [v]
+    (let [sorted-neighbors (sort-by #(dist-func v (:x %)) class-vector)
+          k-neighbors (first sorted-neighbors)]
+      (:y k-neighbors))))
 
 ;(use 'knn :reload-all)
 
