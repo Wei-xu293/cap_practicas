@@ -43,8 +43,12 @@
                 (mapcat moviments)
                 (mapcat moviments)
                 (mapcat moviments)
-                (some-reducing #(= des %)))
-               true?
+                ;(some-reducing #(= des %))
+                (filter #(= des %))
+                (take 1))
+               (fn
+                 ([r] r)
+                 ([_ _] true))
                false
                (list ini))))
 
