@@ -6,17 +6,14 @@
 (def column 8)
 
 (defn dins [pos]
-  (let [sz (count pos) [n m] pos]
+  (let [sz (count pos) [x y] pos]
     (assert (= 2 sz))
-    (cond 
-      (or (< n 1) (> n row) (< m 1) (> m column)) 
-      false
-      
-      :else true)))
+    (and (<= 1 x row)
+         (<= 1 y column))))
 
 ; (i j)
-(def salts ['(-2 -1) '(-1 -2) '(1 -2) '(2 -1) 
-            '(2 1) '(1 2) '(-1 2) '(-2 1)])
+(def salts '((-2 -1) (-1 -2) (1 -2) (2 -1) 
+             (2 1) (1 2) (-1 2) (-2 1)))
 
 (defn jumpTo [i s]
   (let [[a b] i [x y] s]
@@ -27,6 +24,29 @@
     (assert (= 2 sz))
     (filter dins (map (partial jumpTo pos) salts))))
 
+; (mapcat moviments (moviments '(1 1)))
+
+(defn some-reducing [pred]
+  (fn [rf]
+    (fn 
+      ([] (rf))
+      ([result] (rf result))
+      ([result val]
+       (if (pred val)
+         (reduced true)
+         result)))))
+
+(defn pot-anar3 [ini des]
+  (let [sz1 (count ini) sz2 (count des)]
+    (assert (and (= sz1 2) (= sz2 2)))
+    (transduce (comp 
+                (mapcat moviments)
+                (mapcat moviments)
+                (mapcat moviments)
+                (some-reducing #(= des %)))
+               true?
+               false
+               (list ini))))
 
 ; (use 'cavall :reload-all)
 ; Jocs de Proves
@@ -38,3 +58,6 @@
 ; (moviments '(1 1)) 👉 ((2 3) (3 2))
 ; (pot-anar3 '(1 1) '(4 5)) 👉 true
 ; (pot-anar3 '(1 1) '(4 6)) 👉 false
+
+
+; ref: https://clojure.org/reference/transducers
