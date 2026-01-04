@@ -16,7 +16,7 @@
       (print " ")
       (recur a (dec n)))))
 
-(defn gat [parent]
+(defn gat [_] ; parent
   (fn [k] (k "mèu")))
 
 (defn tigre [parent]
